@@ -85,6 +85,10 @@ func resourceArtifactoryReplicationConfig() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+						"proxy": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -149,6 +153,10 @@ func unpackReplicationConfig(s *schema.ResourceData) *v1.ReplicationConfig {
 				replication.PathPrefix = artifactory.String(prefix.(string))
 			}
 
+			if proxy, ok := m["proxy"]; ok {
+				replication.Proxy = artifactory.String(proxy.(string))
+			}
+
 			if pass, ok := m["password"]; ok {
 				replication.Password = artifactory.String(pass.(string))
 			}
@@ -207,6 +215,12 @@ func packReplicationConfig(replicationConfig *v1.ReplicationConfig, d *schema.Re
 
 			if repo.PathPrefix != nil {
 				replication["path_prefix"] = *repo.PathPrefix
+			}
+
+			if repo.Proxy != nil {
+				replication["proxy"] = *repo.Proxy
+			} else if repo.ProxyRef != nil && repo.ProxyRef.Key != nil {
+				replication["proxy"] = *repo.ProxyRef.Key
 			}
 
 			replications = append(replications, replication)
