@@ -197,6 +197,11 @@ func resourceArtifactoryRemoteRepository() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
+			"charts_base_url": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
 			"client_tls_certificate": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -317,6 +322,7 @@ func unpackRemoteRepo(s *schema.ResourceData) *v1.RemoteRepository {
 	repo.BlockMismatchingMimeTypes = d.getBoolRef("block_mismatching_mime_types", true)
 	repo.BowerRegistryURL = d.getStringRef("bower_registry_url", true)
 	repo.BypassHeadRequests = d.getBoolRef("bypass_head_requests", true)
+	repo.ChartsBaseURL = d.getStringRef("charts_base_url", true)
 	repo.ClientTLSCertificate = d.getStringRef("client_tls_certificate", true)
 	repo.Description = d.getStringRef("description", true)
 	repo.EnableCookieManagement = d.getBoolRef("enable_cookie_management", true)
@@ -388,6 +394,7 @@ func packRemoteRepo(repo *v1.RemoteRepository, d *schema.ResourceData) error {
 	logErr(d.Set("block_mismatching_mime_types", repo.BlockMismatchingMimeTypes))
 	logErr(d.Set("bower_registry_url", repo.BowerRegistryURL))
 	logErr(d.Set("bypass_head_requests", repo.BypassHeadRequests))
+	logErr(d.Set("charts_base_url", repo.ChartsBaseURL))
 	logErr(d.Set("client_tls_certificate", repo.ClientTLSCertificate))
 	logErr(d.Set("description", repo.Description))
 	logErr(d.Set("enable_cookie_management", repo.EnableCookieManagement))
